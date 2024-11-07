@@ -1,0 +1,130 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/*---------Login--------*/
+
+.background {
+  background: rgb(2,0,36);
+  background: linear-gradient(0deg, rgba(2,0,36,1) 0%, rgba(2,9,41,1) 38%, rgba(13,81,94,1) 100%); 
+  height: 100vh;
+  width: 100vw; 
+  text-align: center;
+  color: #999;
+  display: flex;
+}
+
+.login-form {
+  height: 420px;
+  width: 540px;
+  padding: 20px 90px 20px 90px;
+  background-color: #0007;
+  margin: auto;
+  border-radius: 6px;
+}
+
+.login-form h1 {
+  margin: 4px auto 30px auto;
+  color: #fff;
+  margin-top: 12px;
+}
+
+.login-form input {
+  display: block;
+  height: 32px;
+  width: 320px;
+  margin: 10px auto 10px auto;
+  background-color: #0000;
+  color: #fff;
+  border: 1px solid #999;
+}
+
+.login-form input:active {
+  outline: #162a49;
+}
+
+.login-form button {
+  box-shadow:inset 0px 0px 15px 3px #23395e;
+	background:linear-gradient(to bottom, #2e466e 5%, #415989 100%);
+	background-color:#2e466e;
+	border-radius:6px;
+	border:1px solid #1f2f47;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-size:15px;
+	padding:6px 120px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #263666;
+  margin-bottom: 12px;
+}
+
+.login-form button:hover {
+  background:linear-gradient(to bottom, #415989 5%, #2e466e 100%);
+	background-color:#415989;
+}
+
+.login-form a {
+  text-decoration: none;
+  color: #ddd;
+}
+
+.login-form a:hover {
+  text-decoration: underline;
+  color: #bbb;
+}
+
+.login-form p {
+  font-size: 14px;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.login-form p a {
+  color: #fff;
+}
+
+.login-form p a:hover {
+  text-decoration: underline;
+  color: #fff;
+}
+
+/*------Galeria--------*/
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  color: #000;
+  background-color: #bbb;
+  text-align: center;
+}
+
+.navbar {
+  background-color: #010e46;
+  height: 5vh;
+  width: 100vw;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #999;
+}
+
+.content-container {
+  display: flex;
+}
+
+.menu {
+  height: 95vh;
+  width: 2vw;
+  background-color: #fff;
+}
+
+.menu:hover {
+  width: 6vw;
+}
+
+.load-file {
+  margin: 20px auto;
+}
