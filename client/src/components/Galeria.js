@@ -1,28 +1,6 @@
-import { useState } from 'react'
+import { Outlet } from 'react-router-dom'
 
 function Galeria () {
-  const [file, setFile] = useState()
-  const fileValue = e => {
-    console.log('fruta')
-    setFile(e.target.files[0])
-  }
-  function loadFile (e) {
-    console.log(file)
-    console.log(file.name)
-    const data = new FormData()
-    data.append('file', file)
-    console.log(data)
-    fetch('http://localhost:5000/uploadfile', {
-      method: 'POST',
-      body: data
-    })
-      .then(response => response.json)
-      .then(data => {
-        console.log(data)
-      })
-
-    e.preventDefault()
-  }
   return (
     <>
       <div className='container'>
@@ -34,13 +12,7 @@ function Galeria () {
         </header>
         <main className='content-container'>
           <aside className='menu' />
-          <section className='load-file'>
-            <form className='subir-archivos'>
-              <h1>Subi una foto</h1>
-              <input type='file' accept='image/*, audio/*, video/*, .pdf, .zip, .rar, .doc, .docx, .xls, xlsx' multiple onChange={fileValue} />
-              <button onClick={loadFile}>Subir</button>
-            </form>
-          </section>
+          <Outlet />
         </main>
       </div>
     </>
