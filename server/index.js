@@ -136,6 +136,29 @@ async function getAuthToken(applicationKeyId, applicationKey) {
     return authResponse.data;
 }
 
+async function getDownloadAuthToken(applicationToken, bucketId, fileName) {
+  try {
+    const downloadAuthResponse = await axios.post(
+      "https://api.backblazeb2.com/b2api/v2/b2_get_download_authorization",
+      {
+        bucketId: bucketId,  // ID del bucket donde está el archivo
+        fileNamePrefix: fileName, // Nombre exacto del archivo
+        validDurationInSeconds: 3600, // Duración del token (1 hora)
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${applicationToken}`,  // Asegúrate de que el token sea correcto
+        },
+      }
+    );
+    return downloadAuthResponse.data;
+  } catch (error) {
+    console.error('Error obteniendo el token de descarga:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+}
+
+
 // Función para obtener la URL de subida
 async function getUploadUrl(bucketId, apiUrl, authorizationToken) {
     const uploadUrlResponse = await axios.post(
@@ -195,14 +218,15 @@ app.post("/uploadfile", upload.single("file"), async (req, res) => {
             },
         });
 
-        
-        const fileId = response.data.fileId;
+        const fileId = response.data.fileName;
+        const downloadToken = await getDownloadAuthToken(authData.authorizationToken, bucketId, fileId)
         /* console.log(fileId) */
         /* console.log(uploadData) */
         /* console.log(authData.authorizationToken) */
 
-        const downloadUrl = await getDownloadUrl(bucketId, fileId, authData.authorizationToken);        
-        console.log("URL de descarga: ", downloadUrl);
+        /* const downloadUrl = await getDownloadUrl(bucketId, fileId, downloadToken);        
+        console.log("URL de descarga: ", downloadUrl); */
+        console.log(downloadToken)
         
         
         /* console.log(response) */
