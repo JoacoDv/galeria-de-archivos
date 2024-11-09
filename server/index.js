@@ -7,6 +7,7 @@ import transporter from './nodemailerConfig.js'
 import upload from './multerConfig.js'
 import dotenv from 'dotenv'
 import axios from 'axios'
+import fs from 'fs'
 const PORT = process.env.PORT ?? 8080
 const app = express()
 dotenv.config()
@@ -111,133 +112,38 @@ app.post('/usuarios/login', async (req, res) => {
   }
 })
 
-/* app.post('/uploadfile', upload.single('file'), async (req, res) => {
-  const data = req.file
-  console.log(data)
-  try {
-    res.status(200)
-  } catch (error) {
-    console.error('no se pudo subir el archivo', error)
-    res.status(500)
-  }
-})
- */
-
-
-
-// Función para obtener el authorizationToken
-async function getAuthToken(applicationKeyId, applicationKey) {
-    const credentials = Buffer.from(`${applicationKeyId}:${applicationKey}`).toString("base64");
-    const authResponse = await axios.get("https://api.backblazeb2.com/b2api/v2/b2_authorize_account", {
-        headers: {
-            Authorization: `Basic ${credentials}`,
-        },
-    });
-    return authResponse.data;
-}
-
-async function getDownloadAuthToken(applicationToken, bucketId, fileName) {
-  try {
-    const downloadAuthResponse = await axios.post(
-      "https://api.backblazeb2.com/b2api/v2/b2_get_download_authorization",
-      {
-        bucketId: bucketId,  // ID del bucket donde está el archivo
-        fileNamePrefix: fileName, // Nombre exacto del archivo
-        validDurationInSeconds: 3600, // Duración del token (1 hora)
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${applicationToken}`,  // Asegúrate de que el token sea correcto
-        },
-      }
-    );
-    return downloadAuthResponse.data;
-  } catch (error) {
-    console.error('Error obteniendo el token de descarga:', error.response ? error.response.data : error.message);
-    throw error;
-  }
-}
-
-
-// Función para obtener la URL de subida
-async function getUploadUrl(bucketId, apiUrl, authorizationToken) {
-    const uploadUrlResponse = await axios.post(
-        `${apiUrl}/b2api/v2/b2_get_upload_url`,
-        { bucketId },
-        {
-            headers: {
-                Authorization: authorizationToken,
-            },
-        }
-    );
-    return uploadUrlResponse.data;
-}
-
-
-
-async function getDownloadUrl(bucketId, fileId, authToken) {
-  const response = await axios.post(
-      "https://api.backblazeb2.com/b2api/v2/b2_get_download_authorization",
-      {
-          bucketId: bucketId,
-          fileNamePrefix: fileId,  // Usas el fileId aquí
-          validDurationInSeconds: 3600,  // Duración del token en segundos (1 hora)
-      },
-      {
-          headers: {
-              Authorization: authToken,
-          },
-      }
-  );
-  return response.data.downloadUrl;
-}
-
-
 
 // Ruta para manejar la subida del archivo
 app.post("/uploadfile", upload.single("file"), async (req, res) => {
-    try {
-        const applicationKeyId = "005095c306a5f8b0000000001";
-        const applicationKey = "K0056p2RuHJxhKiXntjt4qQE6zdNFSg";
-        const bucketId = "20a9a54ca3b0064a953f081b";
-        const fileName = req.file.originalname;
-
-        // Paso 1: Obtener el authorizationToken
-        const authData = await getAuthToken(applicationKeyId, applicationKey);
-
-        // Paso 2: Obtener la URL de subida
-        const uploadData = await getUploadUrl(bucketId, authData.apiUrl, authData.authorizationToken);
-
-        // Paso 3: Sube el archivo a Backblaze B2 usando el buffer
-        const response = await axios.post(uploadData.uploadUrl, req.file.buffer, {
-            headers: {
-                Authorization: uploadData.authorizationToken,
-                "X-Bz-File-Name": fileName,
-                "Content-Type": req.file.mimetype,
-                "X-Bz-Content-Sha1": "do_not_verify", // Usa `do_not_verify` para simplificar la prueba; en producción es mejor calcular el SHA1
-            },
-        });
-
-        const fileId = response.data.fileName;
-        const downloadToken = await getDownloadAuthToken(authData.authorizationToken, bucketId, fileId)
-        /* console.log(fileId) */
-        /* console.log(uploadData) */
-        /* console.log(authData.authorizationToken) */
-
-        /* const downloadUrl = await getDownloadUrl(bucketId, fileId, downloadToken);        
-        console.log("URL de descarga: ", downloadUrl); */
-        console.log(downloadToken)
-        
-        
-        /* console.log(response) */
-        /* console.log(response, authData, uploadData) */
-
-        res.json({ message: "Subida exitosa", data: response.data });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Error en la subida", error: error.message });
-    }
+  if(!req.headers.authorization){
+    res.status(401).json({error: "unauthorize"})
+  }
+  const base64 = req.file.buffer.toString("base64")
+  const tipo = req.file.mimetype
+  const nombre = req.file.originalname
+  //TODO: usar authorizationMethod para checkear que verifico un token
+  const [_authorizationMethod, token] = req.headers.authorization.split(" ")
+  const {id} = jwt.verify(token, process.env.TOKEN)
+  try {
+    pool.query('INSERT INTO archivos (id, archivo, tipo, nombre) VALUES ($1, $2, $3, $4)', [id, base64, tipo, nombre])
+    res.status(200).json({respuesta: 'se pudo guardar'})
+  } catch (error) {
+    console.error('no se a podido guardar el archivo', error)
+    res.status(500).json({ error: "fallo al cargar el archivo"})
+  }
 });
+
+app.get("/showfiles", async (req, res) => {
+  const [ _authorizationMethod, token] = req.headers.authorization.split(" ")
+  const {id} = jwt.verify(token, process.env.TOKEN)
+ try {
+    const response = await pool.query('SELECT * FROM archivos WHERE id = $1', [id])
+    res.status(200).json({archivos: response.rows})
+  } catch (error) {
+    console.error("no se han podido obtener los archivos", error)
+    res.status(500).json({error: 'fallo al cargar'})
+  }
+})
 
 
 

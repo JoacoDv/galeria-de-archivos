@@ -7,6 +7,7 @@ import MailEnviado from './components/MailEnviado'
 import Validacion from './components/Validacion'
 import CambiarContraseña from './components/CambiarContraseña'
 import Files from './components/Files'
+import Settings from './components/Settings'
 import { Routes, Route } from 'react-router-dom'
 
 function App () {
@@ -21,6 +22,7 @@ function App () {
         <Route path='/contraseña/modificar' element={<CambiarContraseña />} />
         <Route path='/home' element={<Galeria />}>
           <Route path='' element={<Files />} />
+          <Route path='settings' element={<Settings />} />
         </Route>
       </Routes>
     </div>

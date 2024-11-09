@@ -4,6 +4,11 @@
   padding: 0;
 }
 
+body {
+  background-color: #bbb;
+
+}
+
 /*---------Login--------*/
 
 .background {
@@ -94,10 +99,9 @@
 /*------Galeria--------*/
 
 .container {
-  height: 100vh;
+  /* height: 100vh; */
   width: 100vw;
   color: #000;
-  background-color: #bbb;
   text-align: center;
 }
 
@@ -112,7 +116,7 @@
 }
 
 .content-container {
-  display: flex;
+  
 }
 
 .menu {
@@ -126,5 +130,25 @@
 }
 
 .load-file {
-  margin: 20px auto;
+  margin: 40px auto;
+}
+
+.grid-content {
+  display: grid;
+  margin: auto 20px;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
+  grid-template-rows: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px; 
+  padding: 20px
+}
+
+.grid-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover; 
+  border-radius: 8px;
+}
+
+.grid-item img:hover {
+  opacity: 0.7;
 }
