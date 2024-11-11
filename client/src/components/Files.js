@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 function Files () {
   const location = useLocation()
@@ -28,6 +28,13 @@ function Files () {
     e.preventDefault()
   }
 
+  function deleteImage (id) {
+    console.log(id)
+    fetch(`http://localhost:5000/delete/${id}`, {
+      method: 'DELETE'
+    })
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -45,14 +52,14 @@ function Files () {
       }
     }
     fetchData()
-  }, [])
+  }, [loadFile, deleteImage, Link])
 
   return (
     <>
       <section className='load-file'>
         <form className='subir-archivos'>
           <h1>Subi una foto</h1>
-          <input type='file' accept='image/*, audio/*, video/*, .pdf, .zip, .rar, .doc, .docx, .xls, xlsx' multiple onChange={fileValue} />
+          <input type='file' accept='image/*' multiple onChange={fileValue} />
           <button onClick={loadFile}>Subir</button>
         </form>
       </section>
@@ -61,7 +68,15 @@ function Files () {
           return image.map((image, index) => {
             return (
               <div key={index} className='grid-item'>
-                <img alt={`${image.name}`} className={`${image.nombre}`} src={`data:${image.tipo};base64,${image.archivo}`} />
+                <button
+                  className='delete' onClick={() => {
+                    deleteImage(image.imaged_id)
+                  }}
+                >X
+                </button>
+                <a href={`data:${image.tipo};base64,${image.archivo}`} download={`${image.nombre}`}>
+                  <img alt={`${image.nombre}`} className={`${image.nombre}`} src={`data:${image.tipo};base64,${image.archivo}`} />
+                </a>
               </div>
             )
           }

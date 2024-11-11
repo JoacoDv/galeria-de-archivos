@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom'
 
 function Login () {
   const navigate = useNavigate()
-  const [token, setToken] = useState()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   function emailValue (e) {
@@ -24,14 +23,11 @@ function Login () {
     })
       .then(response => response.json())
       .then(data => {
-        setToken(data.token)
-        console.log(data.token)
         if (data.token) {
           navigate(`/home?token=${data.token}`)
         }
       })
 
-    console.log(token)
     e.preventDefault()
   }
   return (

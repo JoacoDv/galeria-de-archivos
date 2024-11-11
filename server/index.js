@@ -20,6 +20,18 @@ app.get('/', (req, res) => {
   res.send('API para crear y autenticar usuarios')
 })
 
+app.get('/usuario/:token', async (req, res) => {
+  const {token} = req.params
+  const {id} = jwt.verify(token, process.env.TOKEN)
+  try {
+    const response = await pool.query('SELECT username FROM usuarios WHERE id = $1', [id])
+    res.status(200).json({usuario: response.rows[0].username})
+  } catch (error) {
+    console.error('se fue todo a la mierda', error)
+    res.status(500).json({error: 'se chingo la cosa'})
+  }
+})
+
 
 // Ruta para crear un nuevo usuario
 app.post('/usuarios', async (req, res) => {
@@ -145,7 +157,16 @@ app.get("/showfiles", async (req, res) => {
   }
 })
 
-
+app.delete("/delete/:id", (req, res) => {
+  const {id} = req.params
+  try {
+    pool.query("DELETE FROM archivos WHERE imaged_id = $1", [id])
+    res.status(200).json({ DELETE: 'foto eliminada'})
+  } catch (error) {
+    console.error('no se a podido eliminar la foto', error)
+    res.status(500).json({error: 'fallo al eliminar la foto'})
+  }
+})
 
 
 app.listen(PORT, () => {

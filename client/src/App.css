@@ -114,9 +114,10 @@ body {
   align-items: center;
   color: #999;
 }
-
-.content-container {
-  
+ 
+.navbar a {
+  color: #999;
+  text-decoration: none;
 }
 
 .menu {
@@ -151,4 +152,13 @@ body {
 
 .grid-item img:hover {
   opacity: 0.7;
+}
+
+.delete {
+  position: absolute;
+  background: transparent;
+  color: red;
+  border: transparent;
+  font-size: 22px;
+  z-index: 10;
 }
