@@ -7,7 +7,7 @@ const pool = new Pool({
   user: 'joaco',
   host: 'localhost',
   database: 'usuarios',
-  password: process.env.PG_PASSWORD,
+  password: process.env.PGPASSWORD,
   port: 5432
 })
 

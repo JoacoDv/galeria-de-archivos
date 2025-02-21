@@ -8,7 +8,7 @@ const transporter = createTransport({
     secure: false, // true for port 465, false for other ports
     auth: {
       user: 'joacodv2003@gmail.com',
-      pass: process.env.NM_PASSWORD
+      pass: process.env.NMPASSWORD
     }
   })
   
