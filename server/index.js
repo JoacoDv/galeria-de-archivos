@@ -39,9 +39,6 @@ async function createTable() {
     console.log('Tabla "usuarios" creada exitosamente');
   } catch (err) {
     console.error('Error ejecutando la query:', err);
-  } finally {
-    await pool.end();
-    console.log('Conexión cerrada');
   }
 }
 
