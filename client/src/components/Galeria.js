@@ -6,7 +6,7 @@ function Galeria () {
   const token = location.search.split('=').slice(1).join('')
   const [name, setName] = useState()
   useEffect(() => {
-    fetch(`http://localhost:5000/usuario/${token}`)
+    fetch(`https://api-galeria-wbq3.onrender.com/usuario/${token}`)
       .then(response => response.json())
       .then(data => setName(data.usuario))
   }, [])

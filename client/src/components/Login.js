@@ -12,7 +12,7 @@ function Login () {
     setPassword(e.target.value)
   }
   function log (e) {
-    fetch('http://localhost:5000/usuarios/login', {
+    fetch('https://api-galeria-wbq3.onrender.com/usuarios/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

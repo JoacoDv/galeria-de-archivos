@@ -24,7 +24,7 @@ function Registro () {
     e.preventDefault()
 
     if (password === checkPassword) {
-      fetch('http://localhost:5000/usuarios', {
+      fetch('https://api-galeria-wbq3.onrender.com/usuarios', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

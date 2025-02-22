@@ -5,7 +5,7 @@ function Validacion () {
   const token = location.search.split('=').slice(1).join('')
   console.log(token)
 
-  fetch('http://localhost:5000/validacion', {
+  fetch('https://api-galeria-wbq3.onrender.com/validacion', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'

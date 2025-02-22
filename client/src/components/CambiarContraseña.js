@@ -15,7 +15,7 @@ function CambiarContraseña () {
   }
   function changePassword (e) {
     if (token && password === checkPassword) {
-      fetch('http://localhost:5000/password/change', {
+      fetch('https://api-galeria-wbq3.onrender.com/password/change', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

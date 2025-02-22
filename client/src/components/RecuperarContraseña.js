@@ -8,7 +8,7 @@ function RecuperarContraseña () {
     setMail(e.target.value)
   }
   function sendMail (e) {
-    fetch('http://localhost:5000/password', {
+    fetch('https://api-galeria-wbq3.onrender.com/password', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

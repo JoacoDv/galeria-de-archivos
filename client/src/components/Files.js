@@ -13,7 +13,7 @@ function Files () {
     const data = new FormData()
     data.append('file', file)
     console.log(data)
-    fetch('http://localhost:5000/uploadfile', {
+    fetch('https://api-galeria-wbq3.onrender.com/uploadfile', {
       method: 'POST',
       headers: new Headers({
         Authorization: 'Token ' + token
@@ -30,7 +30,7 @@ function Files () {
 
   function deleteImage (id) {
     console.log(id)
-    fetch(`http://localhost:5000/delete/${id}`, {
+    fetch(`https://api-galeria-wbq3.onrender.com/delete/${id}`, {
       method: 'DELETE'
     })
   }
@@ -38,7 +38,7 @@ function Files () {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:5000/showfiles', {
+        const response = await fetch('https://api-galeria-wbq3.onrender.com/showfiles', {
           method: 'GET',
           headers: {
             Authorization: 'Token ' + token
