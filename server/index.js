@@ -20,6 +20,33 @@ app.get('/', (req, res) => {
   res.send('API para crear y autenticar usuarios')
 })
 
+async function createTable() {
+  try {
+    await client.connect();
+    console.log('Conectado a PostgreSQL');
+
+    const query = `
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(255) UNIQUE NOT NULL,
+        email VARCHAR(255) UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        validacion BOOLEAN DEFAULT FALSE
+      );
+    `;
+    
+    await client.query(query);
+    console.log('Tabla "usuarios" creada exitosamente');
+  } catch (err) {
+    console.error('Error ejecutando la query:', err);
+  } finally {
+    await client.end();
+    console.log('Conexión cerrada');
+  }
+}
+
+createTable();
+
 app.get('/usuario/:token', async (req, res) => {
   const {token} = req.params
   const {id} = jwt.verify(token, process.env.TOKEN)
