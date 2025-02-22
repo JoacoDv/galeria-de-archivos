@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 
 async function createTable() {
   try {
-    await client.connect();
+    await pool.connect();
     console.log('Conectado a PostgreSQL');
 
     const query = `
@@ -35,12 +35,12 @@ async function createTable() {
       );
     `;
     
-    await client.query(query);
+    await pool.query(query);
     console.log('Tabla "usuarios" creada exitosamente');
   } catch (err) {
     console.error('Error ejecutando la query:', err);
   } finally {
-    await client.end();
+    await pool.end();
     console.log('Conexión cerrada');
   }
 }
